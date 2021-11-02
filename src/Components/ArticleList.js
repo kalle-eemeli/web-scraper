@@ -11,16 +11,22 @@ class ArticleList extends React.Component {
    
     componentDidMount() {
         fetch('http://localhost:8000/news')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw Error('could not fetch data')
+            }
+            return response.json()
+        })
         .then(result => {
-            this.setState({data: result})
+            this.setState({data: result});
+        }).catch(err => {
+            alert(err)
         })
     }
 
     render() {
         return (
             <div className="ArticleList">
-                <h1 style={{fontSize: 60}}>NEWEST ARTICLES FROM GAMERANX.COM</h1>
                 <ul>
                     {this.state.data.map(item =>
                         <li>
